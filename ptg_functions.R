@@ -117,7 +117,59 @@ gitPull <- function(localPath){
   system(com)
 }
 ## ============================================
+ScatterPlot <- function(myOptions){
+  if(is.null(myOptions$data)) stop("data is required.\n")
+  myDF <- myOptions$data
+  myDataNames <- names(myDF)
+  tt <- myOptions$ttitle
+  xt <- myOptions$xtitle
+  yt <- myOptions$ytitle
+  if(is.null(tt)) tt <- ""
+  if(is.null(xt)) xt <- myDataNames[1]
+  if(is.null(yt)) yt <- myDataNames[2]
 
+  names(myDF)[1] <- "x"
+  names(myDF)[2] <- "y"
+
+  if(is.null(myOptions$SeriesLabels)){
+    myDF$colours <- "all"
+  } else {
+    myDF$colours <- as.factor(myDF[myOptions$SeriesLabels][[1]])
+  }
+  
+  if(is.null(myOptions$FacetLabels)){
+    myDF$facets  <- ""
+  } else {
+    myDF$facets <- as.factor(myDF[myOptions$FacetLabels][[1]])
+  }
+  
+  if(is.null(myOptions$FacetLabels)){
+    myDF$facets  <- ""
+  } else {
+    myDF$facets <- as.factor(myDF[myOptions$FacetLabels][[1]])
+  }
+  
+  if(is.null(myOptions$MSizeLabels)){
+    msize  <- 10
+  } else {
+    myDF$msize <- as.numeric(myDF[myOptions$MSizeLabels][[1]])
+    myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
+  }  
+  
+  g <- ggplot(myDF,(aes(x = x, y = y)))
+  if(is.null(myOptions$MSizeLabels)){
+  g <- g + geom_point(aes(colour = colours), size = msize)
+  } else {
+  g <- g + geom_point(aes(colour = colours, size = msize))
+  }
+  if(!(is.null(myOptions$SeriesColours))){
+  g <- g + scale_color_manual(breaks=levels(myDF$colours),values=myOptions$SeriesColours)
+  }
+  g <- g + labs(x=xt,y=yt,title=tt)
+
+  return (g)
+}    
+## ============================================
 
 
 ## ============================================
