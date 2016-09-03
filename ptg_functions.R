@@ -200,7 +200,7 @@ ScatterPlot <- function(myOptions){
 BarPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
   g <- ggplot(myOptions$data,(aes(x = x, y = y)))
-  g <- g + geom_bar()
+  g <- g + geom_bar(aes(colour = colours),stat="identity")
   g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
   return (g)
 }    
