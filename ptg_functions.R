@@ -139,7 +139,7 @@ ScatterPlot <- function(myOptions){
   
   g <- ggplot(myOptions$data,(aes(x = x, y = y)))
   if(is.null(myOptions$MSizeLabels)){
-  g <- g + geom_point(aes(colour = colours), size = msize)
+  g <- g + geom_point(aes(colour = colours), size = myOptions$MSize)
   } else {
   g <- g + geom_point(aes(colour = colours, size = msize))
   }
@@ -188,8 +188,6 @@ SetOptions <- function(myOptions){
   }
   
   if(!is.null(myOptions$MSizeLabels)){
-    myDF$msize  <- myOptions$MSize
-  } else {
     myDF$msize <- as.numeric(myDF[myOptions$MSizeLabels][[1]])
     myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
   }  
