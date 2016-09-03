@@ -199,11 +199,14 @@ ScatterPlot <- function(myOptions){
 ## ============================================
 BarPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
-  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
+  g <- ggplot(myOptions$bardata,(aes(x = x, y = y)))
   g <- g + geom_bar(aes(fill = colours),stat="identity")
+  if(!is.null(myOptions$linedata)){
+  g <- g + geom_line(data=myOptions$linedata, aes(x=x, y=y), colour=myOptions$linecolour)
+  }
   g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
   return (g)
-}    
+} 
 ## ============================================
 # Multiple plot function
 #
