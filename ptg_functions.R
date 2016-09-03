@@ -187,10 +187,7 @@ SetOptions <- function(myOptions){
     myOptions$MSize <- 1
   }
   
-  if(!is.null(myOptions$MSizeLabels)){
-    myDF$msize <- as.numeric(myDF[myOptions$MSizeLabels][[1]])
-    myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
-  }  
+
   
   myOptions$data <- myDF
   return (myOptions)
