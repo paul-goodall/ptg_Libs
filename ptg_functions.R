@@ -117,6 +117,12 @@ gitPull <- function(localPath){
   system(com)
 }
 ## ============================================
+NormalDist <- function(x, mu, sig){
+  ind <- (x-mu)^2
+  denom <- 2*sig^2
+  exp(-ind/denom)/sqrt(denom*pi)
+}
+## ============================================
 ScatterPlot <- function(myOptions){
   if(is.null(myOptions$data)) stop("data is required.\n")
   myDF <- myOptions$data
