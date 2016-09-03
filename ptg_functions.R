@@ -136,6 +136,7 @@ NormalDist <- function(x, mu, sig, height="auto"){
 ## ============================================
 ScatterPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
+  
   g <- ggplot(myOptions$data,(aes(x = x, y = y)))
   if(is.null(myOptions$MSizeLabels)){
   g <- g + geom_point(aes(colour = colours), size = msize)
@@ -186,8 +187,8 @@ SetOptions <- function(myOptions){
     myOptions$MSize <- 1
   }
   
-  if(is.null(myOptions$MSizeLabels)){
-    msize  <- myOptions$MSize
+  if(!is.null(myOptions$MSizeLabels)){
+    myDF$msize  <- myOptions$MSize
   } else {
     myDF$msize <- as.numeric(myDF[myOptions$MSizeLabels][[1]])
     myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
