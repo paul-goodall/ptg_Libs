@@ -145,6 +145,8 @@ SetOptions <- function(myOptions){
   if(is.null(xt)) xt <- myDataNames[1]
   if(is.null(yt)) yt <- myDataNames[2]
   
+  if(!is.null(myOptions$linedata)) names(myOptions$linedata) <- c("x","y")
+  
   myOptions$ttitle <- tt
   myOptions$xtitle <- xt
   myOptions$ytitle <- yt
