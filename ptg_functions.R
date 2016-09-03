@@ -134,23 +134,6 @@ NormalDist <- function(x, mu, sig, height="auto"){
   d <- data.frame(x,y)
 }
 ## ============================================
-ScatterPlot <- function(myOptions){
-  myOptions <- SetOptions(myOptions)
-  
-  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
-  if(is.null(myOptions$MSizeLabels)){
-  g <- g + geom_point(aes(colour = colours), size = myOptions$MSize)
-  } else {
-  g <- g + geom_point(aes(colour = colours, size = msize))
-  }
-  if(!(is.null(myOptions$SeriesColours))){
-  g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
-  }
-  g <- g + labs(x=xt,y=yt,title=tt)
-
-  return (g)
-}   
-## ============================================
 SetOptions <- function(myOptions){
   if(is.null(myOptions$data)) stop("data is required.\n")
   myDF <- myOptions$data
@@ -161,6 +144,10 @@ SetOptions <- function(myOptions){
   if(is.null(tt)) tt <- ""
   if(is.null(xt)) xt <- myDataNames[1]
   if(is.null(yt)) yt <- myDataNames[2]
+  
+  myOptions$ttitle <- tt
+  myOptions$xtitle <- xt
+  myOptions$ytitle <- yt
 
   names(myDF)[1] <- "x"
   names(myDF)[2] <- "y"
@@ -192,6 +179,23 @@ SetOptions <- function(myOptions){
   myOptions$data <- myDF
   return (myOptions)
 }  
+## ============================================
+ScatterPlot <- function(myOptions){
+  myOptions <- SetOptions(myOptions)
+  
+  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
+  if(is.null(myOptions$MSizeLabels)){
+  g <- g + geom_point(aes(colour = colours), size = myOptions$MSize)
+  } else {
+  g <- g + geom_point(aes(colour = colours, size = msize))
+  }
+  if(!(is.null(myOptions$SeriesColours))){
+  g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
+  }
+  g <- g + labs(x=xt,y=yt,title=tt)
+
+  return (g)
+}   
 ## ============================================
 BarPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
