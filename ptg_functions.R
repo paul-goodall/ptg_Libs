@@ -201,7 +201,7 @@ BarPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
   g <- ggplot(myOptions$data,(aes(x = x, y = y)))
   g <- g + geom_bar(aes(colour = colours))
-  g <- g + labs(x=xt,y=yt,title=tt)
+  g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
   return (g)
 }    
 ## ============================================
