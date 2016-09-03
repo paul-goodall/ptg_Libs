@@ -149,8 +149,12 @@ ScatterPlot <- function(myOptions){
     myDF$facets <- as.factor(myDF[myOptions$FacetLabels][[1]])
   }
   
+  if(is.null(myOptions$MSize)){
+    myOptions$MSize <- 1
+  }
+  
   if(is.null(myOptions$MSizeLabels)){
-    msize  <- 10
+    msize  <- myOptions$MSize
   } else {
     myDF$msize <- as.numeric(myDF[myOptions$MSizeLabels][[1]])
     myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
