@@ -143,7 +143,7 @@ ScatterPlot <- function(myOptions){
   g <- g + geom_point(aes(colour = colours, size = msize))
   }
   if(!(is.null(myOptions$SeriesColours))){
-  g <- g + scale_color_manual(breaks=levels(myDF$colours),values=myOptions$SeriesColours)
+  g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
   }
   g <- g + labs(x=xt,y=yt,title=tt)
 
