@@ -135,6 +135,22 @@ NormalDist <- function(x, mu, sig, height="auto"){
 }
 ## ============================================
 ScatterPlot <- function(myOptions){
+  myOptions <- SetOptions(myOptions)
+  g <- ggplot(myDF,(aes(x = x, y = y)))
+  if(is.null(myOptions$MSizeLabels)){
+  g <- g + geom_point(aes(colour = colours), size = msize)
+  } else {
+  g <- g + geom_point(aes(colour = colours, size = msize))
+  }
+  if(!(is.null(myOptions$SeriesColours))){
+  g <- g + scale_color_manual(breaks=levels(myDF$colours),values=myOptions$SeriesColours)
+  }
+  g <- g + labs(x=xt,y=yt,title=tt)
+
+  return (g)
+}   
+## ============================================
+SetOptions <- function(myOptions){
   if(is.null(myOptions$data)) stop("data is required.\n")
   myDF <- myOptions$data
   myDataNames <- names(myDF)
@@ -177,17 +193,15 @@ ScatterPlot <- function(myOptions){
     myDF$msize <- myDF$msize-min(myDF$msize)/(max(myDF$msize)-min(myDF$msize))
   }  
   
-  g <- ggplot(myDF,(aes(x = x, y = y)))
-  if(is.null(myOptions$MSizeLabels)){
-  g <- g + geom_point(aes(colour = colours), size = msize)
-  } else {
-  g <- g + geom_point(aes(colour = colours, size = msize))
-  }
-  if(!(is.null(myOptions$SeriesColours))){
-  g <- g + scale_color_manual(breaks=levels(myDF$colours),values=myOptions$SeriesColours)
-  }
+  myOptions$data <- myDF
+  return (myOptions)
+}  
+## ============================================
+BarPlot <- function(myOptions){
+  myOptions <- SetOptions(myOptions)
+  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
+  g <- g + geom_bar(aes(colour = colours))
   g <- g + labs(x=xt,y=yt,title=tt)
-
   return (g)
 }    
 ## ============================================
