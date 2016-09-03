@@ -117,10 +117,14 @@ gitPull <- function(localPath){
   system(com)
 }
 ## ============================================
-NormalDist <- function(x, mu, sig){
+NormalDist <- function(x, mu, sig, height="auto"){
   ind <- (x-mu)^2
   denom <- 2*sig^2
-  exp(-ind/denom)/sqrt(denom*pi)
+  x <- exp(-ind/denom)/sqrt(denom*pi)
+  if(height != "auto"){
+    x <- height*x/max(x)
+  }
+  return (x)
 }
 ## ============================================
 ScatterPlot <- function(myOptions){
