@@ -192,7 +192,7 @@ ScatterPlot <- function(myOptions){
   if(!(is.null(myOptions$SeriesColours))){
   g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
   }
-  g <- g + labs(x=xt,y=yt,title=tt)
+  g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
 
   return (g)
 }   
