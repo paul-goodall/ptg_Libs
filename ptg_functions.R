@@ -176,6 +176,10 @@ SetOptions <- function(myOptions){
     myOptions$MSize <- 1
   }
   
+  if(is.null(myOptions$legendPos)){
+    myOptions$legendPos <- "none"    
+  }
+  
 
   
   myOptions$plotdata <- myDF
@@ -193,6 +197,10 @@ ScatterPlot <- function(myOptions){
   }
   if(!(is.null(myOptions$SeriesColours))){
   g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
+  }
+  g <- g + theme(legend.position=myOptions$legendPos)
+  if(!is.null(myOptions$linedata)){
+  g <- g + geom_line(data=myOptions$linedata, aes(x=x, y=y), colour=myOptions$linecolour)
   }
   g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
 
