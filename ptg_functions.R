@@ -180,7 +180,16 @@ SetOptions <- function(myOptions){
     myOptions$legendPos <- "none"    
   }
   
+  myOptions$plotdata_x1 <- min(myOptions$plotdata$x)
+  myOptions$plotdata_x2 <- max(myOptions$plotdata$x)
+  myOptions$plotdata_y1 <- min(myOptions$plotdata$y)
+  myOptions$plotdata_y2 <- max(myOptions$plotdata$y)
+  
+  myOptions$plotdata_dx <- myOptions$plotdata_x2-myOptions$plotdata_x1
+  myOptions$plotdata_dy <- myOptions$plotdata_y2-myOptions$plotdata_y1
 
+  myOptions$capX <- myOptions$plotdata_x1 + 2*myOptions$plotdata_dx/100
+  myOptions$capY <- myOptions$plotdata_y1 - 5*myOptions$plotdata_dy/100
   
   myOptions$plotdata <- myDF
   return (myOptions)
@@ -188,7 +197,7 @@ SetOptions <- function(myOptions){
 ## ============================================
 ScatterPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
-  
+
   g <- ggplot(myOptions$plotdata,(aes(x = x, y = y)))
   if(is.null(myOptions$MSizeLabels)){
   g <- g + geom_point(aes(colour = colours), size = myOptions$MSize)
@@ -198,6 +207,9 @@ ScatterPlot <- function(myOptions){
   g <- g + stat_smooth(method = "lm")
   if(!(is.null(myOptions$SeriesColours))){
   g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
+  }
+  if(!is.null(myOptions$caption)){
+    g <- g + annotate("text", xmin = myOptions$capX, ymin = myOptions$capY, label = myOptions$caption)
   }
   g <- g + theme(legend.position=myOptions$legendPos)
   if(!is.null(myOptions$linedata)){
