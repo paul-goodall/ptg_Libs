@@ -189,7 +189,7 @@ SetOptions <- function(myOptions){
 ScatterPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
   
-  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
+  g <- ggplot(myOptions$plotdata,(aes(x = x, y = y)))
   if(is.null(myOptions$MSizeLabels)){
   g <- g + geom_point(aes(colour = colours), size = myOptions$MSize)
   } else {
