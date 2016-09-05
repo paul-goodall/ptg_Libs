@@ -188,8 +188,10 @@ SetOptions <- function(myOptions){
   myOptions$plotdata_dx <- myOptions$plotdata_x2-myOptions$plotdata_x1
   myOptions$plotdata_dy <- myOptions$plotdata_y2-myOptions$plotdata_y1
 
-  myOptions$capX <- myOptions$plotdata_x1 + 2*myOptions$plotdata_dx/100
-  myOptions$capY <- myOptions$plotdata_y1 - 5*myOptions$plotdata_dy/100
+  if(is.null(myOptions$capx)) myOptions$capx <- 2 
+  if(is.null(myOptions$capy)) myOptions$capy <- 95 
+  myOptions$capX <- myOptions$plotdata_x1 + myOptions$capx*myOptions$plotdata_dx/100
+  myOptions$capY <- myOptions$plotdata_y1 + myOptions$capy*myOptions$plotdata_dy/100
   
   myOptions$plotdata <- myDF
   return (myOptions)
@@ -209,7 +211,7 @@ ScatterPlot <- function(myOptions){
   g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
   }
   if(!is.null(myOptions$caption)){
-    g <- g + annotate("text", xmin = myOptions$capX, ymin = myOptions$capY, label = myOptions$caption)
+    g <- g + annotate("text", x = myOptions$capX, xmin = myOptions$capX, y = myOptions$capY, label = myOptions$caption)
   }
   g <- g + theme(legend.position=myOptions$legendPos)
   if(!is.null(myOptions$linedata)){
@@ -226,6 +228,9 @@ BarPlot <- function(myOptions){
   g <- g + geom_bar(aes(fill = colours),stat="identity")
   if(!is.null(myOptions$linedata)){
   g <- g + geom_line(data=myOptions$linedata, aes(x=x, y=y), colour=myOptions$linecolour)
+  }
+  if(!is.null(myOptions$caption)){
+    g <- g + annotate("text", x = myOptions$capX, xmin = myOptions$capX, y = myOptions$capY, label = myOptions$caption)
   }
   g <- g + theme(legend.position=myOptions$legendPos)
   g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
@@ -279,6 +284,81 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
 }
 
 ## ============================================
+ModelMetrics <- function(myFit,myPDF="out.pdf"){
+  # This is the start of the function:
+  library(grid)
+  library(ggplot2)
+  library(fitdistrplus)
+  
+  actual <- as.numeric(myFit$model[,1])
+  model  <- as.numeric(myFit$fitted)
+  PlotData  <- data.frame(actual,model)
+  
+  # Should be: Residuals = Model - Actual (-ve means Model is under)
+  # So need to take the -ve of this:
+  residuals <- -myFit$residuals
+  error <- mean(sqrt(residuals^2))
+  Rerror <- residuals/actual
+  Perror <- 100*Rerror
+  histdata <- hist(Perror,plot = FALSE)
+  hdata <- data.frame(histdata$mids,histdata$counts)
+  names(hdata) <- c("Percentage Error","Count")
+  normfit <- fitdist(Perror,"norm")
+  normfit <- normfit$estimate
+  mu  <- normfit[1]
+  sig <- normfit[2]
+  PlotTitle <- paste0("Model Relative Percentage errors")
+  PlotxTitle <- paste0("% error e = 100*(model-actual)/actual")
+  PlotCaption <- paste0("mu = ",round(mu,digits=4),"\nsigma = ",round(sig,digits=4))
+  
+  ndist <- NormalDist(histdata$mids,mu,sig,height=max(histdata$counts))
+  
+  rdata <- data.frame(actual,residuals)
+  adata <- data.frame(actual,actual)
+  
+  theCall <- as.character(myFit$call)
+  theCall <- paste0(theCall[1],"(formula = ",theCall[2],", data = ",theCall[3],")")
+  
+  myOptions <- list()
+  myOptions$plotdata <- PlotData
+  myOptions$ttitle <- paste0("Model Prediction .vs. Actual Data\n",theCall)
+  myOptions$MSize <- 1
+  myOptions$capx <- 20
+  myOptions$capy <- 100
+  myOptions$caption <- "black line: y=x\nPerfect Model"
+  myOptions$SeriesColours <- c("magenta")
+  myOptions$linedata   <- adata
+  myOptions$linecolour <- "black"
+  p1 <- ScatterPlot(myOptions)
+  
+  myOptions2 <- list()
+  myOptions2$ttitle <- PlotTitle
+  myOptions2$xtitle <- PlotxTitle
+  myOptions2$capx <- 10
+  myOptions2$capy <- 85
+  myOptions2$caption <- PlotCaption
+  myOptions2$plotdata <- hdata
+  myOptions2$linedata <- ndist
+  myOptions2$linecolour <- "blue"
+  p2 <- BarPlot(myOptions2)
+  
+  myOptions3 <- list()
+  myOptions3$MSize <- 1
+  myOptions3$SeriesColours <- c("red")
+  myOptions3$ttitle <- "residuals as a function of actual value"
+  myOptions3$xtitle <- "actual"
+  myOptions3$ytitle <- "residuals"
+  myOptions3$plotdata <- rdata
+  myOptions3$linecolour <- "blue"
+  p3 <- ScatterPlot(myOptions3)
+  
+  multiplot(p1, p2, p3, layout=matrix(c(1,1,2,3),nrow=2,ncol=2))
+  pdf(file=myPDF,width=12,height=6)
+  multiplot(p1, p2, p3, layout=matrix(c(1,1,2,3),nrow=2,ncol=2))
+  dev.off()
+  
+}
+
 ## ============================================
 ## ============================================
 ## ============================================
