@@ -195,6 +195,7 @@ ScatterPlot <- function(myOptions){
   } else {
   g <- g + geom_point(aes(colour = colours, size = msize))
   }
+  g <- g + stat_smooth(method = "lm")
   if(!(is.null(myOptions$SeriesColours))){
   g <- g + scale_color_manual(breaks=levels(myOptions$data$colours),values=myOptions$SeriesColours)
   }
@@ -214,6 +215,7 @@ BarPlot <- function(myOptions){
   if(!is.null(myOptions$linedata)){
   g <- g + geom_line(data=myOptions$linedata, aes(x=x, y=y), colour=myOptions$linecolour)
   }
+  g <- g + theme(legend.position=myOptions$legendPos)
   g <- g + labs(x=myOptions$xtitle,y=myOptions$ytitle,title=myOptions$ttitle)
   return (g)
 } 
