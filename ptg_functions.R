@@ -135,7 +135,7 @@ NormalDist <- function(x, mu, sig, height="auto"){
 }
 ## ============================================
 SetOptions <- function(myOptions){
-  if(is.null(myOptions$data)) stop("data is required.\n")
+  if(is.null(myOptions$plotdata)) stop("plotdata is required.\n")
   myDF <- myOptions$plotdata
   myDataNames <- names(myDF)
   tt <- myOptions$ttitle
