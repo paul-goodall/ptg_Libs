@@ -136,7 +136,7 @@ NormalDist <- function(x, mu, sig, height="auto"){
 ## ============================================
 SetOptions <- function(myOptions){
   if(is.null(myOptions$data)) stop("data is required.\n")
-  myDF <- myOptions$data
+  myDF <- myOptions$plotdata
   myDataNames <- names(myDF)
   tt <- myOptions$ttitle
   xt <- myOptions$xtitle
@@ -178,7 +178,7 @@ SetOptions <- function(myOptions){
   
 
   
-  myOptions$data <- myDF
+  myOptions$plotdata <- myDF
   return (myOptions)
 }  
 ## ============================================
@@ -201,7 +201,7 @@ ScatterPlot <- function(myOptions){
 ## ============================================
 BarPlot <- function(myOptions){
   myOptions <- SetOptions(myOptions)
-  g <- ggplot(myOptions$data,(aes(x = x, y = y)))
+  g <- ggplot(myOptions$plotdata,(aes(x = x, y = y)))
   g <- g + geom_bar(aes(fill = colours),stat="identity")
   if(!is.null(myOptions$linedata)){
   g <- g + geom_line(data=myOptions$linedata, aes(x=x, y=y), colour=myOptions$linecolour)
