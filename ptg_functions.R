@@ -180,10 +180,10 @@ SetOptions <- function(myOptions){
     myOptions$legendPos <- "none"    
   }
   
-  myOptions$plotdata_x1 <- min(myOptions$plotdata$x)
-  myOptions$plotdata_x2 <- max(myOptions$plotdata$x)
-  myOptions$plotdata_y1 <- min(myOptions$plotdata$y)
-  myOptions$plotdata_y2 <- max(myOptions$plotdata$y)
+  myOptions$plotdata_x1 <- min(myDF$x)
+  myOptions$plotdata_x2 <- max(myDF$x)
+  myOptions$plotdata_y1 <- min(myDF$y)
+  myOptions$plotdata_y2 <- max(myDF$y)
   
   myOptions$plotdata_dx <- myOptions$plotdata_x2-myOptions$plotdata_x1
   myOptions$plotdata_dy <- myOptions$plotdata_y2-myOptions$plotdata_y1
